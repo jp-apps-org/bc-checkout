@@ -4,6 +4,6 @@ export default function navigateToOrderConfirmation(location = window.location):
     // const url = `${location.pathname.replace(/\/$/, '')}/order-confirmation`;
     // location.replace(url);
 
-    location.replace("http://100.26.223.23:3000/order-confirmation");
+    location.replace("https://store.homefi.pr/order-confirmation");
     return new Promise(noop);
 }
