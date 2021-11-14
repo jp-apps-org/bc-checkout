@@ -2,7 +2,7 @@ import { withFormik, FieldProps, FormikProps } from 'formik';
 import React, { memo, useCallback, FunctionComponent, ReactNode } from 'react';
 import { object, string } from 'yup';
 
-import { withLanguage, TranslatedHtml, TranslatedString, WithLanguageProps } from '../locale';
+import { withLanguage, /*TranslatedHtml,*/ TranslatedString, WithLanguageProps } from '../locale';
 import { getPrivacyPolicyValidationSchema, PrivacyPolicyField } from '../privacyPolicy';
 import { Button, ButtonVariant } from '../ui/button';
 import { BasicFormField, Fieldset, Form, Legend  } from '../ui/form';
@@ -35,7 +35,7 @@ const GuestForm: FunctionComponent<GuestFormProps & WithLanguageProps & FormikPr
     continueAsGuestButtonLabelId,
     isLoading,
     onChangeEmail,
-    onShowLogin,
+    // onShowLogin,
     privacyPolicyUrl,
     requiresMarketingConsent,
 }) => {
@@ -61,10 +61,6 @@ const GuestForm: FunctionComponent<GuestFormProps & WithLanguageProps & FormikPr
                     </Legend>
                 }
             >
-                <p>
-                    <TranslatedHtml id="customer.checkout_as_guest_text" />
-                </p>
-
                 <div className="customerEmail-container">
                     <div className="customerEmail-body">
                         <EmailField onChange={ onChangeEmail } />
@@ -93,7 +89,7 @@ const GuestForm: FunctionComponent<GuestFormProps & WithLanguageProps & FormikPr
                     </div>
                 </div>
 
-                {
+                {/* {
                     !isLoading && <p>
                         <TranslatedString id="customer.login_text" />
                         { ' ' }
@@ -105,7 +101,7 @@ const GuestForm: FunctionComponent<GuestFormProps & WithLanguageProps & FormikPr
                             <TranslatedString id="customer.login_action" />
                         </a>
                     </p>
-                }
+                } */}
 
                 { checkoutButtons }
             </Fieldset>

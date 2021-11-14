@@ -58,9 +58,16 @@ export function loadFiles(options?: LoadFilesOptions): Promise<LoadFilesResult> 
         { prefetch: true }
     );
 
-    const languageConfig = isLanguageWindow(window) ?
+    let languageConfig = isLanguageWindow(window) ?
         window.language :
-        { locale: 'en', locales: {}, translations: {} };
+        { locale: 'it', locales: {}, translations: {} };
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const locale = urlParams.get('locale');
+
+    if(locale) {
+        languageConfig = { locale, locales: {}, translations: {} };
+    }
 
     return Promise.all([
         getDefaultTranslations(languageConfig.locale),

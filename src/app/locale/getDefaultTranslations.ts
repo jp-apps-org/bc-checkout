@@ -31,6 +31,10 @@ const AVAILABLE_TRANSLATIONS: Record<string, () => Promise<{ default: unknown }>
         /* webpackChunkName: "translations-sv" */
         './translations/sv.json'
     ),
+    es: () => import(
+        /* webpackChunkName: "translations-es" */
+        './translations/es.json'
+    ),
     en: () => Promise.resolve(({ default: FALLBACK_TRANSLATIONS })),
 };
 

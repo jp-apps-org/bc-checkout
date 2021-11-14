@@ -26,7 +26,7 @@ class OrderSummaryItems extends React.Component<OrderSummaryItemsProps, OrderSum
         super(props);
 
         this.state = {
-            isExpanded: false,
+            isExpanded: true,
         };
     }
 
