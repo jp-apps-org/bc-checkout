@@ -4317,7 +4317,7 @@ h6 a:hover {
   padding-left: 1.5rem; }
 
 .cart-header {
-  display: table;
+  display: block;
   padding: 1.5rem;
   width: 100%; }
 
@@ -5453,4 +5453,4 @@ body.klarna-payments-fso-open {
     font-weight: normal; }
 
 
-/*# sourceMappingURL=checkout-015e0237.css.map*/
+/*# sourceMappingURL=checkout-bcdc0ca3.css.map*/
