@@ -80,10 +80,12 @@ const renderHeader: FunctionComponent<{
         </span>
         <IconClose />
     </a>
-    <ModalHeader additionalClassName="cart-modal-title">
-        <TranslatedString id="cart.cart_heading" />
-    </ModalHeader>
-
+    <div style={{ textAlign: "center" }}>
+        <ModalHeader additionalClassName="cart-modal-title">
+            <TranslatedString id="cart.cart_heading" />
+        </ModalHeader>
+        <TranslatedString id="cart.cart_sub_heading" />
+    </div>
     { headerLink }
 </Fragment>);
 
