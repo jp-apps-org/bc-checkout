@@ -47,12 +47,13 @@
             "save_billing_address_error": "An error occurred while saving the billing address to your price quote. Please try again.",
             "billing_address_amazon": "Same as the Billing address set by you in your Amazon account.",
             "billing_address_amazonpay": "Managed by Amazon Pay",
-            "use_shipping_address_label": "My billing address is the same as my shipping address."
+            "use_shipping_address_label": "My billing address is the same as my installation address."
         },
         "cart": {
             "billed_amount_text": "*You will be charged and invoiced {total} ({code}) for this order.",
             "based_on_currency_text": "Based on {total} {code}",
-            "cart_heading": "Order Summary",
+            "cart_heading": "Initial One Time Charges",
+            "cart_sub_heading": "These are only charged once and are separate from the monthly charges.",
             "digital_item_text": "Digital Item",
             "discount_text": "Discount",
             "downloads_action": "Go to Downloads",
@@ -405,7 +406,7 @@
         },
         "shipping": {
             "cart_change_error": "An update to your shopping cart has been detected and your available shipping costs have been updated. Please re-select a shipping method to continue.",
-            "enter_shipping_address_text": "Please enter a shipping address in order to see shipping quotes",
+            "enter_shipping_address_text": "Please enter a installation address in order to see installation quotes",
             "order_comment_label": "Order Comments",
             "assign_item_error": "An error occurred while assigning item to address. Please try again",
             "assign_item_invalid_address_error_heading": "Invalid Address",
@@ -423,7 +424,7 @@
             "ship_to_multi": "Ship to multiple addresses",
             "ship_to_single": "Ship to a single address",
             "shipping_heading": "Installation",
-            "shipping_method_label": "Shipping Method",
+            "shipping_method_label": "Installation Method",
             "shipping_option_expired_error": "The shipping price you were quoted is no longer valid. Click OK to see the most up-to-date shipping prices.",
             "shipping_option_expired_heading": "Your shipping price has been updated",
             "view_shipping_options_action": "See Other Options"
