@@ -13,14 +13,14 @@ interface PaymentSubmitButtonTextProps {
     methodType?: string;
     methodName?: string;
     initialisationStrategyType?: string;
-    isPpsdkEnabled?: boolean;
+    brandName?: string;
 }
 
 const providersWithCustomClasses = [PaymentMethodId.Bolt];
 
-const PaymentSubmitButtonText: FunctionComponent<PaymentSubmitButtonTextProps> = memo(({ methodId, methodName, methodType, methodGateway, isPpsdkEnabled = false, initialisationStrategyType }) => {
+const PaymentSubmitButtonText: FunctionComponent<PaymentSubmitButtonTextProps> = memo(({ methodId, methodName, methodType, methodGateway, initialisationStrategyType, brandName }) => {
 
-    if (isPpsdkEnabled && methodName && initialisationStrategyType === 'none') {
+    if (methodName && initialisationStrategyType === 'none') {
         return <TranslatedString data={ { methodName } } id="payment.ppsdk_continue_action" />;
     }
 
@@ -35,7 +35,7 @@ const PaymentSubmitButtonText: FunctionComponent<PaymentSubmitButtonTextProps> =
     if (methodId === PaymentMethodId.Bolt) {
         return (<Fragment>
             <IconBolt additionalClassName="payment-submit-button-bolt-icon" />
-            <TranslatedString id="payment.bolt_continue_action" />
+            <TranslatedString id="payment.place_order_action" />
         </Fragment>);
     }
 
@@ -56,15 +56,24 @@ const PaymentSubmitButtonText: FunctionComponent<PaymentSubmitButtonTextProps> =
     }
 
     if (methodType === PaymentMethodType.Paypal) {
-        return <TranslatedString id="payment.paypal_continue_action" />;
+        // TODO: method.id === PaymentMethodId.BraintreeVenmo should be removed after the PAYPAL-1380.checkout_button_strategies_update experiment removal
+        return <TranslatedString id={ methodId === PaymentMethodId.BraintreeVenmo ? 'payment.braintreevenmo_continue_action' : 'payment.paypal_continue_action' } />;
+    }
+
+    if (methodId === PaymentMethodId.BraintreeVenmo) {
+        return <TranslatedString id="payment.braintreevenmo_continue_action" />;
     }
 
     if (methodType === PaymentMethodType.PaypalCredit) {
-        return <TranslatedString id="payment.paypal_credit_continue_action" />;
+        return <TranslatedString data={ { brandName } } id={ brandName ? 'payment.continue_with_brand' : 'payment.paypal_pay_later_continue_action' } />;
+    }
+
+    if (methodType === PaymentMethodType.PaypalVenmo) {
+        return <TranslatedString id="payment.paypal_venmo_continue_action" />;
     }
 
     if (methodId === PaymentMethodId.Opy) {
-        return <TranslatedString id="payment.opy_continue_action" />;
+        return <TranslatedString data={ { methodName } } id="payment.opy_continue_action" />;
     }
 
     if (methodId === PaymentMethodId.Quadpay) {
@@ -89,12 +98,12 @@ export interface PaymentSubmitButtonProps {
     methodType?: string;
     isDisabled?: boolean;
     initialisationStrategyType?: string;
+    brandName?: string;
 }
 
 interface WithCheckoutPaymentSubmitButtonProps {
     isInitializing?: boolean;
     isSubmitting?: boolean;
-    isPpsdkEnabled: boolean;
 }
 
 const PaymentSubmitButton: FunctionComponent<PaymentSubmitButtonProps & WithCheckoutPaymentSubmitButtonProps> = ({
@@ -105,8 +114,8 @@ const PaymentSubmitButton: FunctionComponent<PaymentSubmitButtonProps & WithChec
     methodId,
     methodName,
     methodType,
-    isPpsdkEnabled,
     initialisationStrategyType,
+    brandName,
 }) => (
         <Button
             className={ providersWithCustomClasses.includes(methodId as PaymentMethodId) ? `payment-submit-button-${methodId}` : undefined }
@@ -119,8 +128,8 @@ const PaymentSubmitButton: FunctionComponent<PaymentSubmitButtonProps & WithChec
             variant={ ButtonVariant.Action }
         >
             <PaymentSubmitButtonText
+                brandName={ brandName }
                 initialisationStrategyType={ initialisationStrategyType }
-                isPpsdkEnabled={ isPpsdkEnabled }
                 methodGateway={ methodGateway }
                 methodId={ methodId }
                 methodName={ methodName }
@@ -129,7 +138,7 @@ const PaymentSubmitButton: FunctionComponent<PaymentSubmitButtonProps & WithChec
         </Button>
     );
 
-export default withCheckout(({ checkoutState, checkoutService }) => {
+export default withCheckout(({ checkoutState }) => {
     const {
         statuses: {
             isInitializingCustomer,
@@ -138,15 +147,8 @@ export default withCheckout(({ checkoutState, checkoutService }) => {
         },
     } = checkoutState;
 
-    const isPpsdkEnabled = Boolean(
-        checkoutService.getState()
-            .data.getConfig()
-            ?.checkoutSettings.features['PAYMENTS-6806.enable_ppsdk_strategy']
-    );
-
     return {
         isInitializing: isInitializingCustomer() || isInitializingPayment(),
         isSubmitting: isSubmittingOrder(),
-        isPpsdkEnabled,
     };
 })(memo(PaymentSubmitButton));

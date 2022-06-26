@@ -101,8 +101,9 @@ class Payment extends Component<PaymentProps & WithCheckoutPaymentProps & WithLa
         }
 
         try {
-            await finalizeOrderIfNeeded();
-            onFinalize();
+            const state = await finalizeOrderIfNeeded();
+            const order = state.data.getOrder();
+            onFinalize(order?.orderId);
         } catch (error) {
             if (error.type !== 'order_finalization_not_required') {
                 onFinalizeError(error);
@@ -285,8 +286,11 @@ class Payment extends Component<PaymentProps & WithCheckoutPaymentProps & WithLa
             selectedMethod.type === PaymentMethodProviderType.PPSDK ||
             selectedMethod.id === PaymentMethodId.Amazon ||
             selectedMethod.id === PaymentMethodId.AmazonPay ||
+            selectedMethod.id === PaymentMethodId.CBAMPGS ||
             selectedMethod.id === PaymentMethodId.Checkoutcom ||
+            selectedMethod.id === PaymentMethodId.CheckoutcomGooglePay ||
             selectedMethod.id === PaymentMethodId.Converge ||
+            selectedMethod.id === PaymentMethodId.Humm ||
             selectedMethod.id === PaymentMethodId.Laybuy ||
             selectedMethod.id === PaymentMethodId.Opy ||
             selectedMethod.id === PaymentMethodId.Quadpay ||
@@ -295,6 +299,8 @@ class Payment extends Component<PaymentProps & WithCheckoutPaymentProps & WithLa
             selectedMethod.id === PaymentMethodId.Zip ||
             selectedMethod.gateway === PaymentMethodId.AdyenV2 ||
             selectedMethod.gateway === PaymentMethodId.AdyenV2GooglePay ||
+            selectedMethod.gateway === PaymentMethodId.AdyenV3 ||
+            selectedMethod.gateway === PaymentMethodId.AdyenV3GooglePay ||
             selectedMethod.gateway === PaymentMethodId.Afterpay ||
             selectedMethod.gateway === PaymentMethodId.Clearpay ||
             selectedMethod.gateway === PaymentMethodId.Checkoutcom ||
@@ -324,6 +330,10 @@ class Payment extends Component<PaymentProps & WithCheckoutPaymentProps & WithLa
         if (errorType === 'provider_fatal_error' ||
             errorType === 'order_could_not_be_finalized_error') {
             window.location.replace(cartUrl || '/');
+        }
+
+        if (errorType === 'tax_provider_unavailable') {
+            window.location.reload();
         }
 
         if (isRequestError(error)) {
@@ -386,8 +396,9 @@ class Payment extends Component<PaymentProps & WithCheckoutPaymentProps & WithLa
         }
 
         try {
-            await submitOrder(mapToOrderRequestBody(values, isPaymentDataRequired()));
-            onSubmit();
+            const state = await submitOrder(mapToOrderRequestBody(values, isPaymentDataRequired()));
+            const order = state.data.getOrder();
+            onSubmit(order?.orderId);
         } catch (error) {
             if (error.type === 'payment_method_invalid') {
                 return loadPaymentMethods();

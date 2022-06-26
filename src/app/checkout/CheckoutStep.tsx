@@ -44,9 +44,14 @@ export default class CheckoutStep extends Component<CheckoutStepProps, CheckoutS
 
     componentDidUpdate(prevProps: Readonly<CheckoutStepProps>): void {
         const { isActive } = this.props;
+        const { isClosed } = this.state;
 
         if (isActive && isActive !== prevProps.isActive) {
             this.focusStep();
+        }
+
+        if (!isActive && !isClosed && isMobileView()) {
+            this.setState({ isClosed: true });
         }
     }
 
@@ -85,15 +90,17 @@ export default class CheckoutStep extends Component<CheckoutStepProps, CheckoutS
                     <CheckoutStepHeader
                         heading={ heading }
                         isActive={ isActive }
-                        isClosed={ isClosed }
                         isComplete={ isComplete }
                         isEditable={ isEditable }
                         onEdit={ onEdit }
-                        suggestion={ suggestion }
                         summary={ summary }
                         type={ type }
                     />
                 </div>
+
+                { suggestion && isClosed && !isActive && <div className="checkout-suggestion" data-test="step-suggestion">
+                    { suggestion }
+                </div> }
 
                 { this.renderContent() }
             </li>
@@ -105,16 +112,12 @@ export default class CheckoutStep extends Component<CheckoutStepProps, CheckoutS
 
         return <>
             <MobileView>
-                { matched => {
-                    if (matched) {
-                        return !isActive ? null : <div className="checkout-view-content">
-                            { children }
-                        </div>;
-                    }
-
-                    return <CSSTransition
+                { matched =>
+                    <CSSTransition
                         addEndListener={ this.handleTransitionEnd }
                         classNames="checkout-view-content"
+                        enter={ !matched }
+                        exit={ !matched }
                         in={ isActive }
                         mountOnEnter
                         timeout={ {} }
@@ -126,8 +129,7 @@ export default class CheckoutStep extends Component<CheckoutStepProps, CheckoutS
                         >
                             { children }
                         </div>
-                    </CSSTransition>;
-                } }
+                    </CSSTransition> }
             </MobileView>
         </>;
     }

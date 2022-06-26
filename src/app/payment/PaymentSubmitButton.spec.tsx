@@ -1,6 +1,5 @@
-import { createCheckoutService, CheckoutSelectors, CheckoutService, LanguageService } from '@bigcommerce/checkout-sdk';
+import { createCheckoutService, CheckoutService, LanguageService } from '@bigcommerce/checkout-sdk';
 import { mount, render } from 'enzyme';
-import { set } from 'lodash';
 import React, { FunctionComponent } from 'react';
 
 import { CheckoutProvider } from '../checkout';
@@ -9,12 +8,12 @@ import { createLocaleContext, LocaleContext, LocaleContextType } from '../locale
 import { Button } from '../ui/button';
 import { IconBolt } from '../ui/icon';
 
+import { PaymentMethodId } from './paymentMethod';
 import PaymentSubmitButton, { PaymentSubmitButtonProps } from './PaymentSubmitButton';
 
 describe('PaymentSubmitButton', () => {
     let PaymentSubmitButtonTest: FunctionComponent<PaymentSubmitButtonProps>;
     let checkoutService: CheckoutService;
-    let checkoutState: CheckoutSelectors;
     let languageService: LanguageService;
     let localeContext: LocaleContextType;
 
@@ -22,7 +21,6 @@ describe('PaymentSubmitButton', () => {
         checkoutService = createCheckoutService();
         localeContext = createLocaleContext(getStoreConfig());
         languageService = localeContext.language;
-        checkoutState = checkoutService.getState();
 
         PaymentSubmitButtonTest = props => (
             <CheckoutProvider checkoutService={ checkoutService }>
@@ -86,7 +84,7 @@ describe('PaymentSubmitButton', () => {
         );
 
         expect(component.text())
-            .toEqual('Bolt' + languageService.translate('payment.bolt_continue_action'));
+            .toEqual('Bolt' + languageService.translate('payment.place_order_action'));
         expect(component.find(IconBolt).length)
             .toEqual(1);
     });
@@ -118,13 +116,13 @@ describe('PaymentSubmitButton', () => {
             .toEqual(languageService.translate('payment.chasepay_continue_action'));
     });
 
-    it('renders button with special label for Openpay', () => {
+    it('renders button with special label for Opy', () => {
         const component = mount(
-            <PaymentSubmitButtonTest methodId="opy" />
+            <PaymentSubmitButtonTest methodId="opy" methodName="Opy" />
         );
 
         expect(component.text())
-            .toEqual(languageService.translate('payment.opy_continue_action'));
+            .toEqual(languageService.translate('payment.opy_continue_action', { methodName: 'Opy' }));
     });
 
     it('renders button with special label for PayPal', () => {
@@ -136,13 +134,22 @@ describe('PaymentSubmitButton', () => {
             .toEqual(languageService.translate('payment.paypal_continue_action'));
     });
 
+    it('renders button with special label for BraintreeVenmo', () => {
+        const component = mount(
+            <PaymentSubmitButtonTest methodId={ PaymentMethodId.BraintreeVenmo } methodType="paypal" />
+        );
+
+        expect(component.text())
+            .toEqual(languageService.translate('payment.braintreevenmo_continue_action'));
+    });
+
     it('renders button with special label for PayPal Credit', () => {
         const component = mount(
             <PaymentSubmitButtonTest methodType="paypal-credit" />
         );
 
         expect(component.text())
-            .toEqual(languageService.translate('payment.paypal_credit_continue_action'));
+            .toEqual(languageService.translate('payment.paypal_pay_later_continue_action'));
     });
 
     it('renders button with special label for Quadpay', () => {
@@ -163,41 +170,12 @@ describe('PaymentSubmitButton', () => {
             .toEqual(languageService.translate('payment.zip_continue_action'));
     });
 
-    describe('PAYMENTS-6806.enable_ppsdk_strategy feature flag is off', () => {
-        beforeEach(() => {
-            const flagValues = { 'PAYMENTS-6806.enable_ppsdk_strategy': false };
-            const storeConfig = set(getStoreConfig(), 'checkoutSettings.features', flagValues);
+    it('renders button with label of "Continue with ${methodName}"', () => {
+        const component = mount(
+            <PaymentSubmitButtonTest initialisationStrategyType="none" methodName="Foo" />
+        );
 
-            jest.spyOn(checkoutState.data, 'getConfig')
-                .mockReturnValue(storeConfig);
-        });
-
-        it('does not render button with label of "Continue with ${methodName}"', () => {
-            const component = mount(
-                <PaymentSubmitButtonTest initialisationStrategyType="none" methodName="Foo" />
-            );
-
-            expect(component.text())
-                .not.toEqual(languageService.translate('payment.ppsdk_continue_action', { methodName: 'Foo' }));
-        });
-    });
-
-    describe('PAYMENTS-6806.enable_ppsdk_strategy feature flag is on', () => {
-        beforeEach(() => {
-            const flagValues = { 'PAYMENTS-6806.enable_ppsdk_strategy': true };
-            const storeConfig = set(getStoreConfig(), 'checkoutSettings.features', flagValues);
-
-            jest.spyOn(checkoutState.data, 'getConfig')
-                .mockReturnValue(storeConfig);
-        });
-
-        it('renders button with label of "Continue with ${methodName}"', () => {
-            const component = mount(
-                <PaymentSubmitButtonTest initialisationStrategyType="none" methodName="Foo" />
-            );
-
-            expect(component.text())
-                .toEqual(languageService.translate('payment.ppsdk_continue_action', { methodName: 'Foo' }));
-        });
+        expect(component.text())
+            .toEqual(languageService.translate('payment.ppsdk_continue_action', { methodName: 'Foo' }));
     });
 });

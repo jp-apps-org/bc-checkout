@@ -55,6 +55,7 @@ export type PaymentFormValues = (
     SepaCustomFormFieldsetValues & PaymentFormCommonValues |
     FawryCustomFormFieldsetValues & PaymentFormCommonValues |
     IdealCustomFormFieldsetValues & PaymentFormCommonValues |
+    AccountCreationValues & PaymentFormCommonValues |
     PaymentFormCommonValues
 );
 
@@ -65,6 +66,10 @@ export interface PaymentFormCommonValues {
 
 export interface HostedWidgetPaymentMethodValues {
     shouldSaveInstrument: boolean;
+}
+
+export interface AccountCreationValues {
+    shouldCreateAccount: boolean;
 }
 
 const PaymentForm: FunctionComponent<PaymentFormProps & FormikProps<PaymentFormValues> & WithLanguageProps> = ({
@@ -107,6 +112,14 @@ const PaymentForm: FunctionComponent<PaymentFormProps & FormikProps<PaymentFormV
         default:
             return selectedMethod.id;
         }
+    }, [selectedMethod]);
+
+    const brandName = useMemo(() => {
+        if (!selectedMethod ) {
+            return;
+        }
+
+        return selectedMethod?.initializationData?.payPalCreditProductBrandName?.credit || selectedMethod?.initializationData?.payPalCreditProductBrandName;
     }, [selectedMethod]);
 
     if (shouldExecuteSpamCheck) {
@@ -152,6 +165,7 @@ const PaymentForm: FunctionComponent<PaymentFormProps & FormikProps<PaymentFormV
                 { shouldHidePaymentSubmitButton ?
                     <PaymentMethodSubmitButtonContainer /> :
                     <PaymentSubmitButton
+                        brandName = { brandName }
                         initialisationStrategyType={ selectedMethod && selectedMethod.initializationStrategy?.type }
                         isDisabled={ shouldDisableSubmit }
                         methodGateway={ selectedMethod && selectedMethod.gateway }
@@ -211,6 +225,7 @@ const PaymentMethodListFieldset: FunctionComponent<PaymentMethodListFieldsetProp
             ccNumber: '',
             instrumentId: '',
             paymentProviderRadio: getUniquePaymentMethodId(method.id, method.gateway),
+            shouldCreateAccount: true,
             shouldSaveInstrument: false,
         });
 
@@ -254,7 +269,7 @@ const paymentFormConfig: WithFormikConfig<PaymentFormProps & WithLanguageProps, 
         ccNumber: '',
         paymentProviderRadio: getUniquePaymentMethodId(defaultMethodId, defaultGatewayId),
         instrumentId: '',
-        shouldCreateAccount: false,
+        shouldCreateAccount: true,
         shouldSaveInstrument: false,
         terms: false,
         hostedForm: {

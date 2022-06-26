@@ -1,28 +1,35 @@
 {
   "version": 2,
-  "appVersion": "1.174.3",
+  "appVersion": "1.228.2",
   "dynamicChunks": {
-    "css": [
-      "billing-e15e5dfa.css",
-      "cart-summary~cart-summary-drawer-ad2d875f.css",
-      "customer-1f3cba72.css",
-      "payment-8cbc3fde.css",
-      "shipping-44002772.css"
-    ],
     "js": [
-      "billing-0443485b.js",
-      "cart-summary-drawer-f8ea07df.js",
-      "cart-summary-9752d13f.js",
-      "cart-summary~cart-summary-drawer-50f35266.js",
-      "customer-d2cd6b06.js",
-      "order-summary-drawer-bae32735.js",
-      "order-summary-9f9e7d8d.js",
-      "payment-37331687.js",
-      "shipping-c5565986.js",
-      "vendors~billing~customer~payment~shipping-39c954ca.js",
-      "vendors~billing~customer~shipping-aa9324ae.js",
-      "vendors~billing~payment~shipping-a0759009.js",
-      "vendors~billing~shipping-06673ef5.js"
+      "311-7b54aa94.js",
+      "37-c9958705.js",
+      "65-9bd89200.js",
+      "850-6ddbf896.js",
+      "904-d483b6f3.js",
+      "961-78c79762.js",
+      "billing-2b81e074.js",
+      "cart-summary-drawer-85e330f5.js",
+      "cart-summary-adfa5f47.js",
+      "customer-b0655be9.js",
+      "order-summary-drawer-f4fea4ba.js",
+      "order-summary-b081636f.js",
+      "payment-88145c78.js",
+      "shipping-c78c2ae5.js"
+    ],
+    "LICENSE": [
+      "375-284690d0.js.LICENSE",
+      "961-78c79762.js.LICENSE",
+      "989-3d032381.js.LICENSE"
+    ],
+    "css": [
+      "billing-c27720ba.css",
+      "cart-summary-drawer-877886c0.css",
+      "cart-summary-877886c0.css",
+      "customer-88527da4.css",
+      "payment-b9c64672.css",
+      "shipping-16977484.css"
     ],
     "svg": [
       "static/card-abef8595.svg"
@@ -32,14 +39,14 @@
     ]
   },
   "js": [
-    "runtime-fed06adb.js",
-    "polyfill~checkout-9263022e.js",
-    "transients~checkout-b9e72e2f.js",
-    "sentry~checkout-890a75e5.js",
-    "vendors~checkout-1f866378.js",
-    "checkout-93d15d5a.js"
+    "runtime-29f16d1e.js",
+    "15-3ea9a90c.js",
+    "375-284690d0.js",
+    "35-3708ed88.js",
+    "989-3d032381.js",
+    "checkout-a272c9be.js"
   ],
   "css": [
-    "checkout-bcdc0ca3.css"
+    "checkout-fbd31331.css"
   ]
 }

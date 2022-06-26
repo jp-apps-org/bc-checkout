@@ -3,6 +3,38 @@ import { Translations } from '@bigcommerce/checkout-sdk';
 import { FALLBACK_TRANSLATIONS } from './translations';
 
 const AVAILABLE_TRANSLATIONS: Record<string, () => Promise<{ default: unknown }>> = {
+    es: () => import(
+        /* webpackChunkName: "translations-es" */
+        './translations/es.json'
+        ),
+    'es-419': () => import(
+        /* webpackChunkName: "translations-es-419" */
+        './translations/es-419.json'
+        ),
+    'es-AR': () => import(
+        /* webpackChunkName: "translations-es-ar" */
+        './translations/es-AR.json'
+        ),
+    'es-CL': () => import(
+        /* webpackChunkName: "translations-es-cl" */
+        './translations/es-CL.json'
+        ),
+    'es-CO': () => import(
+        /* webpackChunkName: "translations-es-co" */
+        './translations/es-CO.json'
+        ),
+    'es-MX': () => import(
+        /* webpackChunkName: "translations-es-mx" */
+        './translations/es-MX.json'
+        ),
+    'es-PE': () => import(
+        /* webpackChunkName: "translations-es-pe" */
+        './translations/es-PE.json'
+        ),
+    da: () => import(
+        /* webpackChunkName: "translations-da" */
+        './translations/da.json'
+        ),
     de: () => import(
         /* webpackChunkName: "translations-de" */
         './translations/de.json'
@@ -19,6 +51,10 @@ const AVAILABLE_TRANSLATIONS: Record<string, () => Promise<{ default: unknown }>
         /* webpackChunkName: "translations-nl" */
         './translations/nl.json'
     ),
+    no: () => import(
+        /* webpackChunkName: "translations-no" */
+        './translations/no.json'
+    ),
     'pt-BR': () => import(
         /* webpackChunkName: "translations-pt-br" */
         './translations/pt-BR.json'
@@ -30,10 +66,6 @@ const AVAILABLE_TRANSLATIONS: Record<string, () => Promise<{ default: unknown }>
     sv: () => import(
         /* webpackChunkName: "translations-sv" */
         './translations/sv.json'
-    ),
-    es: () => import(
-        /* webpackChunkName: "translations-es" */
-        './translations/es.json'
     ),
     en: () => Promise.resolve(({ default: FALLBACK_TRANSLATIONS })),
 };

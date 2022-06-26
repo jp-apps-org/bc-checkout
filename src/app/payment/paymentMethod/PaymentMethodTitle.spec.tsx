@@ -24,16 +24,17 @@ describe('PaymentMethodTitle', () => {
     let localeContext: LocaleContextType;
 
     const LOGO_PATHS: { [key: string]: string } = {
-        'paypal-credit': '/img/payment-providers/paypal-credit.png',
+        'paypal-credit': '/img/payment-providers/paypal_commerce_logo_letter.svg',
         'visa-checkout': '/img/payment-providers/visa-checkout.png',
         afterpay: '/img/payment-providers/afterpay-badge-blackonmint.png',
         amazon: '/img/payment-providers/amazon-header.png',
+        applepay: '/modules/checkout/applepay/images/applepay-header@2x.png',
         chasepay: '/img/payment-providers/chase-pay.png',
         googlepay: '/img/payment-providers/google-pay.png',
+        humm: '/img/payment-providers/humm-checkout-header.png',
         klarna: '/img/payment-providers/klarna-header.png',
         laybuy: '/img/payment-providers/laybuy-checkout-header.png',
         masterpass: 'https://masterpass.com/dyn/img/acc/global/mp_mark_hor_blk.svg',
-        opy: '/img/payment-providers/opy.svg',
         paypal: '/img/payment-providers/paypalpaymentsprouk.png',
         quadpay: '/img/payment-providers/quadpay.png',
         sezzle: '/img/payment-providers/sezzle-checkout-header.png',
@@ -95,6 +96,7 @@ describe('PaymentMethodTitle', () => {
 
     it('renders logo based on their method type', () => {
         const methodTypes = [
+            PaymentMethodType.ApplePay,
             PaymentMethodType.Chasepay,
             PaymentMethodType.GooglePay,
             PaymentMethodType.Masterpass,
@@ -125,7 +127,6 @@ describe('PaymentMethodTitle', () => {
         const methods = [
             { id: PaymentMethodId.Amazon, method: 'widget' },
             { id: PaymentMethodId.Klarna, method: 'widget' },
-            { id: PaymentMethodId.Opy, method: 'credit-card' },
             { id: PaymentMethodId.PaypalCommerce, method: 'widget' },
         ];
 
@@ -188,6 +189,7 @@ describe('PaymentMethodTitle', () => {
     it('renders custom text for certain hosted payment methods', () => {
         const methodIds = [
             PaymentMethodId.Affirm,
+            PaymentMethodId.Bolt,
             PaymentMethodId.Klarna,
             PaymentMethodId.Quadpay,
             PaymentMethodId.Sezzle,
@@ -210,6 +212,7 @@ describe('PaymentMethodTitle', () => {
         const methodIds = [
             PaymentMethodId.Amazon,
             PaymentMethodId.ChasePay,
+            PaymentMethodId.Humm,
             PaymentMethodId.Opy,
             PaymentMethodId.PaypalCommerce,
             PaymentMethodType.Barclaycard,
@@ -270,6 +273,30 @@ describe('PaymentMethodTitle', () => {
             .toEqual('mastercard');
     });
 
+    it('renders a different logo for braintreeVenmo methodId for Paypal', () => {
+        const imageExtension = '.svg';
+        const imageFolder = '/modules/checkout/braintreevenmo/images/';
+        const method = PaymentMethodType.Paypal;
+        const id = PaymentMethodId.BraintreeVenmo;
+        const logoUrl = `${config.cdnPath}${imageFolder}braintree_venmo${imageExtension}`;
+
+        const component = mount(<PaymentMethodTitleTest
+            { ...defaultProps }
+            method={ {
+                ...defaultProps.method,
+                id,
+                method,
+                logoUrl,
+            } }
+        />);
+
+        const expectedPath = `${config.cdnPath}${imageFolder}braintree_venmo${imageExtension}`;
+
+        expect(component.find('[data-test="payment-method-logo"]').prop('src'))
+            .toEqual(expectedPath);
+
+    });
+
     it('renders selected credit card type using card number if not using hosted fields', () => {
         const component = mount(<PaymentMethodTitleTest
             { ...defaultProps }
@@ -316,5 +343,53 @@ describe('PaymentMethodTitle', () => {
         component = checkoutcomTitleComponent('checkoutcom');
         expect(component.find('[data-test="payment-method-name"]').text())
             .toEqual(defaultProps.method.config.displayName);
+    });
+
+    it('renders logo based on provider\'s config', () => {
+        const methods = [
+          {
+            id: PaymentMethodId.Opy,
+            config: {
+              ...defaultProps.method.config,
+              logo: 'opy_gray.svg',
+            },
+          },
+        ];
+
+        methods.forEach(method => {
+            const component = mount(<PaymentMethodTitleTest
+                { ...defaultProps }
+                method={ {
+                    ...defaultProps.method,
+                    ...method,
+                } }
+            />);
+
+            expect(component.find('[data-test="payment-method-logo"]').prop('src'))
+                .toEqual(`${config.cdnPath}/img/payment-providers/${method.config.logo}`);
+        });
+    });
+
+    it('renders default logo for Openpay', () => {
+        defaultProps.method.id = PaymentMethodId.Opy;
+        const component = mount(<PaymentMethodTitleTest { ...defaultProps } />);
+
+        expect(component.find('[data-test="payment-method-logo"]').prop('src'))
+            .toEqual(`${config.cdnPath}/img/payment-providers/opy_default.svg`);
+    });
+
+    it('renders name for Visa Checkout', () => {
+        const method = {
+            ...defaultProps.method,
+            method: PaymentMethodType.VisaCheckout,
+        };
+
+        const component = mount(<PaymentMethodTitleTest
+            { ...defaultProps }
+            method={ method }
+        />);
+
+        expect(component.find('[data-test="payment-method-name"]').text())
+            .toEqual(getPaymentMethodName(localeContext.language)(method));
     });
 });
