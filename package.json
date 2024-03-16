@@ -23,7 +23,7 @@
     "pretest": "bin/auto-export.js",
     "test": "jest",
     "test:watch": "jest --watch",
-    "start": "http-server dist"
+    "start": "npm install --global http-server && http-server dist"
   },
   "repository": {
     "type": "git",
