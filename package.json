@@ -23,7 +23,7 @@
     "pretest": "bin/auto-export.js",
     "test": "jest",
     "test:watch": "jest --watch",
-    "start": "npm install --global http-server && http-server dist"
+    "start": "node app.js"
   },
   "repository": {
     "type": "git",
@@ -63,6 +63,7 @@
     "credit-card-type": "^8.0.0",
     "dompurify": "^2.3.4",
     "downshift": "^3.2.10",
+    "express": "^4.18.3",
     "formik": "^1.5.8",
     "local-storage-fallback": "^4.1.1",
     "lodash": "^4.17.21",
