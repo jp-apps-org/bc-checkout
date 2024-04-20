@@ -56,15 +56,15 @@ jobs:
       - name: Login to Azure
         uses: azure/login@v1
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_EE1E9EC9EA7746528D36A1BC314FE4C8 }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_8FC9164133BD4ABB9D55D9F4F6CCA5CA }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_6AF8DD5248BE4F499D319561A31C1841 }}
+          client-id: ${{ secrets.AZURE_APPSERVICE_CLIENTID }}
+          tenant-id: ${{ secrets.AZURE_APPSERVICE_TENANTID }}
+          subscription-id: ${{ secrets.AZURE_APPSERVICE_SUBSCRIPTIONID }}
 
       - name: 'Deploy to Azure Web App'
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
         with:
           app-name: 'app-aeronet-store-checkout'
-          slot-name: 'Production'
+          slot-name: 'Staging'
           package: .
           
